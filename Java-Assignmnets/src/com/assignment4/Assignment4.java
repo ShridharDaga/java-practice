@@ -1,7 +1,6 @@
 package com.assignment4;
 
 import java.time.LocalDate;
-import java.util.Scanner;
 
 public class Assignment4 {
     public static void main(String[] args) {
@@ -27,7 +26,8 @@ public class Assignment4 {
         }
 
         else{
-            LocalDate start, end;
+            LocalDate start;
+            LocalDate end;
             start = signupDate;
 
             //find years of difference
@@ -35,11 +35,12 @@ public class Assignment4 {
             if(diff >= 1){
                 start = signupDate.plusYears(diff);  // match current date year
             }
+
             //+30 -30 condition
             start = start.minusDays(30);
             end =   start.plusDays(60);
 
-            // after +30 date should not be gteater than current
+            // after +30, end date should not be greater than current date
             if(end.isAfter(start)){
                 end = currentDate;
             }

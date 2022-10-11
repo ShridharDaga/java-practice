@@ -1,22 +1,18 @@
 package com.assignment2;
 
+import java.util.Scanner;
+
 public class Assignment2 {
     public static void main(String[] args) {
-        String input1 = "Shridhar";
-        String input2 = "abcdefghijklmnopqrstuvwxyz";
-        String input3 = "abcdefghijklmnopqrstuvwxyz9876541230";
+        Scanner sc = new Scanner(System.in);
 
-        long start = System.currentTimeMillis();
-        check(input1);
-        long end = System.currentTimeMillis();
-        System.out.println("Elapsed Time in milli seconds: "+ (end-start)); // 6-9 milli seconds
-
-//        check(input2);
-//        check(input3);
+        System.out.println("Input : ");
+        String input = sc.nextLine();
+        check(input);
     }
 
     private static void check(String input) {
-        // .count have long as return type
+        // .count have long as return type. Time complexity will be O(n)
         long c = input.toLowerCase().chars()
                 .filter(ch -> ch >= 'a' && ch <= 'z')
                 .distinct()

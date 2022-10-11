@@ -1,12 +1,12 @@
 package com.assignment3;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Assignment3 {
 
@@ -17,59 +17,39 @@ public class Assignment3 {
         ping(ipAddr1);
         ping(ipAddr2);
 
-        ArrayList<String> commandList = new ArrayList<String>();
-
-        commandList.add("ping");
-        commandList.add("www.google.com");
-
-        commands(commandList);
-
     }
-
     public static void ping(String host) {
-        Instant startTime = Instant.now();
-        InetAddress address = null;
+
+        InetAddress address;
+        List<Integer> reachableMedian = new ArrayList<>();
+        List<Integer> unreachableMedian = new ArrayList<>();
+        boolean flag = false;
+
         try {
             address = InetAddress.getByName(host);
-            if (address.isReachable(1000)) {
-                System.out.println("Reachable host : " + host);
-                System.out.println("time in nano seconds: " + Duration.between(startTime, Instant.now()).getNano());
-                System.out.println();
-            } else {
-                System.out.println("Non reachable host : " + host);
-                System.out.println("time in seconds:" + Duration.between(startTime, Instant.now()).getSeconds());
-                System.out.println();
+            for(int i = 0; i < 5 ;i++) {
+                Instant startTime = Instant.now();
+                if (address.isReachable(1000)) {
+                    reachableMedian.add(Duration.between(startTime, Instant.now()).getNano());
+                    flag = true;
+                } else {
+                    unreachableMedian.add(Duration.between(startTime, Instant.now()).getNano());
+                }
             }
         } catch (IOException e) {
             System.out.println(host + " host is not available");
         }
 
-    }
 
-    // method for finding the ping statics of website
-    static void commands(ArrayList<String> commandList) throws Exception {
-
-        // creating the sub process, execute system command
-        ProcessBuilder build = new ProcessBuilder(commandList);
-        Process process = build.start();
-
-        // to read the output
-        BufferedReader input = new BufferedReader(new InputStreamReader(process.getInputStream()));
-        BufferedReader Error = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-        String s = null;
-
-        System.out.println("Standard output: ");
-        int count = 0;
-        while((s = input.readLine()) != null && count != 5) {
-            System.out.println(s);
-            count++;
+        if(flag){
+            Collections.sort(reachableMedian);
+            double floor = Math.floor(reachableMedian.size() / 2);
+            System.out.println("Median time taken to ping reachable host (" + host + ") : " + reachableMedian.get((int) floor) + " nano seconds");
         }
-
-        System.out.println("\nerror (if any): ");
-        while((s = Error.readLine()) != null ) {
-            System.out.println(s);
+        else{
+            Collections.sort(unreachableMedian);
+            double floor2 = Math.floor(unreachableMedian.size() / 2);
+            System.out.println("Median time taken to ping unreachable host (" + host + ") : " + unreachableMedian.get((int) floor2) + " nano seconds");
         }
     }
-
-
 }
