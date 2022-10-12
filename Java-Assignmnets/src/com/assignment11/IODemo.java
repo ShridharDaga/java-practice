@@ -54,10 +54,4 @@ public class IODemo {
             throw new RuntimeException(e);
         }
     }
-
-    public static void main(String[] args) {
-        IODemo obj = new IODemo("input.txt");
-        obj.readFile();
-        obj.writeFile();
-    }
 }
